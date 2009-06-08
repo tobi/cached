@@ -7,7 +7,7 @@ module Cached
     end
     
     def to_ruby    
-      [compiled_meta_methods, compiled_save_method, compiled_fetch_methods].join      
+      [compiled_meta_methods, compiled_save_methods, compiled_fetch_methods].join      
     end        
         
     def compiled_meta_methods
@@ -23,35 +23,58 @@ module Cached
       "def self.object_cache_hash(*args); args.join.hash; end;"
     end
     
-    def compiled_save_method          
-      lines = ['k = object_cache_key', "Cached.store.write(k, self)"]
-
-      @config.indexes.each do |index| 
-        index_name = index_name(index)
-        cache_key  = index_cache_key(index)
-
-        lines.push "Cached.store.write(#{cache_key}, k)" 
-      end
+    def compiled_save_methods
+      compiled_save_object_method + compiled_save_index_method
+    end
+    
+    def compiled_save_object_method          
+      "def save_object_to_cache;" + 
+        "Cached.store.write(object_cache_key, self);" +
+      "end;" +
       
-      "def save_to_cache;" + 
-        lines.join(';') + 
+      "def expire_object_in_cache;" + 
+        "Cached.store.delete(object_cache_key);" +
       "end;"
     end          
+    
+    def compiled_save_index_method
+            
+      keys = @config.indexes.collect { |index| index_cache_key(index) }
+      
+      "def save_indexes_to_cache;" + 
+        "v = #{@config.primary_key};" +
+        keys.collect{|k| "Cached.store.write(#{k}, v);"}.join +
+      "end;" +
+      
+      "def expire_indexes_in_cache;" +
+        keys.collect{|k| "Cached.store.delete(#{k});"}.join +
+      "end;"
+    end
     
     def compiled_fetch_method_for(index)  
       index_name = index_name(index)     
       cache_key  = index_cache_key(index)
       
-      "def self.lookup_by_#{index_name}(#{index.join(', ')});" + 
+      method_suffix_and_parameters = "#{index_name}(#{index.join(', ')})"
+      
+      delegates = @config.delegates.collect { |delegate| "#{delegate}_by_#{method_suffix_and_parameters}"  }
+      
+      "def self.lookup_by_#{method_suffix_and_parameters};" + 
       "  key = Cached.store.read(#{cache_key}); "+
-      "  key ? Cached.store.read(key): nil;" +
+      #}"  key ? Cached.store.read(key): Cached.store.fetch(key) { #{ delegates.join(' || ')  } } ;" + 
+      "  key ? lookup(key): nil;" +
       "end;"
     end
 
     def compiled_fetch_method_for_primary_key      
-      "def self.lookup(pk);" + 
-      "  Cached.store.read(\"#\{object_cache_prefix}:#\{pk}\");"+
-      "end;" + 
+      
+      delegation = @config.delegates.collect{|c| "|| #{c}(pk)" }.join
+      
+      "def self.lookup(pk);" +
+      "  Cached.store.fetch(\"#\{object_cache_prefix}:#\{pk}\") { nil #{delegation} };" +      
+      "end;" +
+      
+      
       "def self.lookup_by_#{@config.primary_key}(pk);" + 
       "  lookup(pk); "+
       "end;" 

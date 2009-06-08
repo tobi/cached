@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper.rb'            
-                     
+require File.dirname(__FILE__) + '/test_helper.rb'                                 
 
 class TestConfigCompiler < Test::Unit::TestCase
 
@@ -16,10 +15,16 @@ class TestConfigCompiler < Test::Unit::TestCase
     @dump.respond_to?(:object_cache_hash)    
   end
   
-  test "syntax compiled_save_method" do
-    @dump.instance_eval @config.compiled_save_method
+  test "syntax compiled_save_object_method" do
+    @dump.instance_eval @config.compiled_save_object_method
     
-    @dump.respond_to?(:save_to_cache)    
+    @dump.respond_to?(:save_object_to_cache)    
+  end
+  
+  test "syntax compiled_save_index_method" do
+    @dump.instance_eval @config.compiled_save_index_method
+    
+    @dump.respond_to?(:save_indexes_to_cache)        
   end
   
   test "syntax compiled_fetch_method_for single column" do
@@ -34,11 +39,15 @@ class TestConfigCompiler < Test::Unit::TestCase
     @dump.respond_to?(:lookup_by_name_and_brand)        
   end
   
-  test "compiled_fetch_method_for_primary_key" do
+  test "syntax compiled_fetch_method_for_primary_key" do
     @dump.instance_eval @config.compiled_fetch_method_for_primary_key
     
     @dump.respond_to?(:lookup)    
     @dump.respond_to?(:lookup_by_id)        
+  end
+  
+  test "all syntax" do
+    @dump.instance_eval @config.to_ruby
   end
   
 end

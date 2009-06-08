@@ -1,3 +1,5 @@
+BEGIN {$VERBOSE = false}
+
 require 'rubygems' unless ENV['NO_RUBYGEMS']
 %w[rake rake/clean fileutils newgem rubigen].each { |f| require f }
 require File.dirname(__FILE__) + '/lib/cached'

@@ -5,8 +5,10 @@ require 'mocha'
 require File.dirname(__FILE__) + '/../lib/cached'
               
 require 'active_support/cache'
+require 'active_record'
 
 Cached.store = ActiveSupport::Cache.lookup_store(:memory_store)
+#Cached.store = ActiveSupport::Cache.lookup_store(:mem_cache_store)
                                                                  
 
 class Test::Unit::TestCase
