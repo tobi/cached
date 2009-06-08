@@ -1,6 +1,6 @@
-  = cached
+= cached
 
-* http://github.com/#{github_username}/#{project_name}
+* http://github.com/tobi/cached
 
 == DESCRIPTION:
 
