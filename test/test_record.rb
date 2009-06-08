@@ -16,7 +16,7 @@ class Person < ActiveRecord::Base
     index :last_name         
     index [:first_name, :last_name]
     
-    #delegate_to :find
+    delegate_to :find
   end
 end
 
@@ -26,14 +26,26 @@ class TestRecord < Test::Unit::TestCase
     @bob = Person.create(:first_name => 'Bob', :last_name => 'Bobsen')
   end
   
+  test "cachemiss delegates to find" do
+    assert !Cached.store.read("person:1")
+    assert_equal @bob, Person.lookup(@bob.id)
+  end
+  
   test "load bob from cache store" do
     @bob.save_to_cache
     
-    assert_equal @bob, Person.find_by_first_name('Bob')
-    assert_equal @bob, Person.find_by_last_name('Bobsen')
-    assert_equal @bob, Person.find_by_first_name_and_last_name('Bob', 'Bobsen')
-    
+    assert_equal @bob, Person.lookup_by_first_name('Bob')
+    assert_equal @bob, Person.lookup_by_last_name('Bobsen')
+    assert_equal @bob, Person.lookup_by_first_name_and_last_name('Bob', 'Bobsen')    
   end
+  
+  test "cache miss on index query will make returned object re-save its indexes" do
+    assert !Cached.store.read("person/first_name:#{hash('Bob')}")
+    assert_equal @bob, Person.lookup_by_first_name('Bob')
+
+    assert Cached.store.read("person/first_name:#{hash('Bob')}")
+  end
+  
     
   private
   

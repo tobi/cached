@@ -57,12 +57,16 @@ module Cached
       
       method_suffix_and_parameters = "#{index_name}(#{index.join(', ')})"
       
-      delegates = @config.delegates.collect { |delegate| "#{delegate}_by_#{method_suffix_and_parameters}"  }
+      delegation = @config.delegates.collect { |delegate| "|| #{delegate}_by_#{method_suffix_and_parameters}"  }
       
       "def self.lookup_by_#{method_suffix_and_parameters};" + 
-      "  key = Cached.store.read(#{cache_key}); "+
-      #}"  key ? Cached.store.read(key): Cached.store.fetch(key) { #{ delegates.join(' || ')  } } ;" + 
-      "  key ? lookup(key): nil;" +
+      "  if key = Cached.store.read(#{cache_key});"+
+      "    lookup(key);"+
+      "  else;"+ 
+      "    obj = nil #{delegation};" +
+      "    obj.save_indexes_to_cache if obj.respond_to?(:save_indexes_to_cache);" +
+      "    obj;" +
+      "  end;" +
       "end;"
     end
 
