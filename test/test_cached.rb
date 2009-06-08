@@ -8,8 +8,7 @@ class Product < Struct.new(:id, :name, :price, :vendor)
   include Cached::Model
   
   
-  cache_by_key :id do 
-    
+  cache_by_key :id do     
     index :name         
     index [:vendor, :name]    
   end
