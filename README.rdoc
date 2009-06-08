@@ -9,18 +9,20 @@ Small trial project that attempts to accelerate common active record like operat
 
 == SYNOPSIS:
 
-  class Product < AR:B
-    include Cached::Model
+  class Product < AR:Base
 
     cache_by_key :id do     
       index :name         
-      index [:brand, :name]    
+      index [:brand, :name]
+      
+      delegate_to :find    
     end
   end
   
   Product.create :name => 'ipod', :brand => 'apple'
   
   Product.lookup(1) # cache_hit, 1 memcached query
+  Product.lookup(2) # cache_miss, 1 memcached query, 1 db query: .find(2) (see delegates_to)
   Product.lookup_by_name('ipod') # cache_hit, 2 memcached queries
   Product.lookup_by_brand_and_name('apple','ipod') # cache_hit, 2 memcached queries
 
