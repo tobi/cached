@@ -7,20 +7,19 @@ module Cached
     end
     
     def to_ruby    
-      compiled_meta_methods +       
-      compiled_save_method + 
-      compiled_fetch_methods 
-      
+      [compiled_meta_methods, compiled_save_method, compiled_fetch_methods].join      
     end        
-    
-    private                   
-    
+        
     def compiled_meta_methods
+      
+      # Instance methods
       "def object_cache_primary_key; \"#{@config.primary_key}\"; end;" + 
       "def object_cache_key; \"\#{object_cache_prefix}:\#{#{@config.primary_key}}\"; end;" + 
       "def object_cache_prefix; \"#{@config.class_name}\"; end;" +       
-      "def self.object_cache_prefix; \"#{@config.class_name}\"; end;" +       
       "def object_cache_hash(*args); args.join.hash; end;" +
+      
+      # Class methods
+      "def self.object_cache_prefix; \"#{@config.class_name}\"; end;" +       
       "def self.object_cache_hash(*args); args.join.hash; end;"
     end
     

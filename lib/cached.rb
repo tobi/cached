@@ -10,5 +10,6 @@ module Cached
 end            
 
 
+require 'cached/config'
 require 'cached/config_compiler'
 require 'cached/model'

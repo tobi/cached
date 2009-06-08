@@ -3,6 +3,10 @@ require 'test/unit'
 require 'rubygems'                                                 
 require 'mocha'
 require File.dirname(__FILE__) + '/../lib/cached'
+              
+require 'active_support/cache'
+
+Cached.store = ActiveSupport::Cache.lookup_store(:memory_store)
                                                                  
 
 class Test::Unit::TestCase
