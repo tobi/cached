@@ -4,7 +4,7 @@ $:.unshift(File.dirname(__FILE__)) unless
   require 'active_support'                                                                               
 
 module Cached
-  VERSION = '0.0.1' 
+  VERSION = '0.5.0' 
   
   mattr_accessor :store
 end            

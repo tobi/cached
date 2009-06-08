@@ -7,7 +7,6 @@ Cached.store = ActiveSupport::Cache.lookup_store(:memory_store)
 class Product < Struct.new(:id, :name, :price, :vendor)  
   include Cached::Model
   
-  
   cache_by_key :id do     
     index :name         
     index [:vendor, :name]    
