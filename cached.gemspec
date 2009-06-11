@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{cached}
   s.rubygems_version = %q{1.3.1}
-  s.signing_key = %q{/Users/tobi/.gem/gem-private_key.pem}
   s.summary = %q{Small trial project that attempts to accelerate common active record like operations without too much black magic.}
   s.test_files = ["test/test_cached.rb", "test/test_cached_delegation.rb", "test/test_config_compiler.rb", "test/test_helper.rb", "test/test_record.rb"]
 
