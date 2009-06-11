@@ -6,7 +6,6 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tobias L\303\274tke"]
-  s.cert_chain = ["/Users/tobi/.gem/gem-public_cert.pem"]
   s.date = %q{2009-06-10}
   s.description = %q{Small trial project that attempts to accelerate common active record like operations without too much black magic.}
   s.email = ["tobi@leetsoft.com"]
