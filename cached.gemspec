@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.date = %q{2009-06-10}
   s.description = %q{Small trial project that attempts to accelerate common active record like operations without too much black magic.}
   s.email = ["tobi@leetsoft.com"]
-  s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "website/index.txt"]
-  s.files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "Rakefile", "config/website.yml.sample", "lib/cached.rb", "script/console", "script/destroy", "script/generate", "script/txt2html", "test/test_cached.rb", "test/test_helper.rb", "website/index.html", "website/index.txt", "website/javascripts/rounded_corners_lite.inc.js", "website/stylesheets/screen.css", "website/template.html.erb", "test/test_cached_delegation.rb", "test/test_config_compiler.rb", "test/test_record.rb"]
+  s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc"]
+  s.files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "Rakefile", "cached.gemspec", "init.rb", "lib/cached.rb", "lib/cached/config.rb", "lib/cached/config_compiler.rb", "lib/cached/model.rb", "lib/cached/record.rb", "test/people_database.rb", "test/test_cached.rb", "test/test_cached_delegation.rb", "test/test_config_compiler.rb", "test/test_helper.rb", "test/test_record.rb"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/tobi/cached}
   s.rdoc_options = ["--main", "README.rdoc"]
