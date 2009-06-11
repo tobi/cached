@@ -1,4 +1,4 @@
-BEGIN {$VERBOSE = false}
+BEGIN {$VERBOSE = nil;$DEBUG = nil}
 
 require 'rubygems' unless ENV['NO_RUBYGEMS']
 %w[rake rake/clean fileutils newgem rubigen].each { |f| require f }
